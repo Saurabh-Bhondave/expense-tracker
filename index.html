@@ -25,7 +25,7 @@
     <h2>Add Expense</h2>
 
 
-    <form>
+    <form id="expenseForm">
 
         <label>
             Expense Name:
@@ -35,7 +35,9 @@
 
         <input
             type="text"
+            id="expenseName"
             placeholder="e.g. Lunch"
+            required
         >
 
         <br><br>
@@ -49,7 +51,9 @@
 
         <input
             type="number"
+            id="expenseAmount"
             placeholder="e.g. 150"
+            required
         >
 
         <br><br>
@@ -61,7 +65,7 @@
 
         <br>
 
-        <select>
+        <select id="expenseCategory">
 
             <option>Food</option>
 
@@ -86,6 +90,8 @@
 
         <input
             type="date"
+            id="expenseDate"
+            required
         >
 
         <br><br>
@@ -101,9 +107,75 @@
     <h2>Expenses</h2>
 
 
-    <p>
-        No expenses added yet.
-    </p>
+    <div id="expenseList">
+
+        <p>
+            No expenses added yet.
+        </p>
+
+    </div>
+
+
+    <script>
+
+        const form =
+            document.getElementById("expenseForm");
+
+        const expenseList =
+            document.getElementById("expenseList");
+
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document.getElementById("expenseName").value;
+
+            const amount =
+                document.getElementById("expenseAmount").value;
+
+            const category =
+                document.getElementById("expenseCategory").value;
+
+            const date =
+                document.getElementById("expenseDate").value;
+
+
+            const expense =
+                document.createElement("div");
+
+
+            expense.innerHTML = `
+
+                <hr>
+
+                <h3>${name}</h3>
+
+                <p>
+                    Amount: ₹${amount}
+                </p>
+
+                <p>
+                    Category: ${category}
+                </p>
+
+                <p>
+                    Date: ${date}
+                </p>
+
+            `;
+
+
+            expenseList.appendChild(expense);
+
+
+            form.reset();
+
+        });
+
+    </script>
 
 
 </body>
