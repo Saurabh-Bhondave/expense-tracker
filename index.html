@@ -22,8 +22,9 @@
     </p>
 
 
-    <h2>Add Expense</h2>
+<h2>Total Expenses: ₹<span id="totalAmount">0</span></h2>
 
+<h2>Expenses</h2>
 
     <form id="expenseForm">
 
@@ -123,7 +124,12 @@
 
         const expenseList =
             document.getElementById("expenseList");
+        
+        let totalAmount = 0;
 
+        const totalDisplay =
+            document.getElementById("totalAmount");
+    
 
         form.addEventListener("submit", function(event) {
 
@@ -169,12 +175,12 @@
 
 
             expenseList.appendChild(expense);
+            
             totalAmount += amount;
 
-totalDisplay.textContent = totalAmount;
+            totalDisplay.textContent = totalAmount;
 
-
-            form.reset();
+             form.reset();
 
         });
 
