@@ -8,8 +8,9 @@
     <title>Personal Expense Tracker</title>
 
     <style>
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, San Francisco;
             max-width: 700px;
             margin: 40px auto;
             padding: 20px;
@@ -50,6 +51,19 @@
             padding: 12px 20px;
             font-size: 16px;
             cursor: pointer;
+            border: none;
+            border-radius: 6px;
+        }
+
+        .add-button {
+            background: #222;
+            color: white;
+        }
+
+        .delete-button {
+            background: #d93636;
+            color: white;
+            margin-top: 10px;
         }
 
         .total-box {
@@ -57,7 +71,7 @@
         }
 
         #totalAmount {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
         }
 
@@ -81,8 +95,11 @@
         .empty {
             color: #777;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
@@ -93,7 +110,7 @@
     </p>
 
 
-    <!-- ADD EXPENSE FORM -->
+    <!-- ADD EXPENSE -->
 
     <div class="form-box">
 
@@ -133,9 +150,13 @@
             <select id="expenseCategory">
 
                 <option value="Food">Food</option>
+
                 <option value="Travel">Travel</option>
+
                 <option value="Shopping">Shopping</option>
+
                 <option value="Bills">Bills</option>
+
                 <option value="Other">Other</option>
 
             </select>
@@ -152,13 +173,18 @@
             >
 
 
-            <button type="submit">
+            <button
+                type="submit"
+                class="add-button">
+
                 Add Expense
+
             </button>
 
         </form>
 
     </div>
+
 
 
     <!-- TOTAL -->
@@ -174,7 +200,8 @@
     </div>
 
 
-    <!-- EXPENSE LIST -->
+
+    <!-- EXPENSES -->
 
     <div class="expense-box">
 
@@ -182,8 +209,12 @@
 
         <div id="expenseList">
 
-            <p id="emptyMessage" class="empty">
+            <p
+                id="emptyMessage"
+                class="empty">
+
                 No expenses added yet.
+
             </p>
 
         </div>
@@ -191,137 +222,233 @@
     </div>
 
 
+
     <!-- JAVASCRIPT -->
 
     <script>
 
-        // Get the form
         const expenseForm =
             document.getElementById("expenseForm");
 
 
-        // Get the expense list
         const expenseList =
             document.getElementById("expenseList");
 
 
-        // Get the total display
         const totalDisplay =
             document.getElementById("totalAmount");
 
 
-        // Get the empty message
         const emptyMessage =
             document.getElementById("emptyMessage");
 
 
-        // Store the total amount
         let totalAmount = 0;
 
 
-        // Run this code when Add Expense is clicked
-        expenseForm.addEventListener("submit", function(event) {
 
-            // Stop the page from refreshing
-            event.preventDefault();
+        // Add an expense
 
+        expenseForm.addEventListener(
+            "submit",
+            function(event) {
 
-            // Get the values entered by the user
-
-            const name =
-                document.getElementById("expenseName").value.trim();
+                event.preventDefault();
 
 
-            const amount =
-                Number(
-                    document.getElementById("expenseAmount").value
+                const name =
+                    document
+                        .getElementById("expenseName")
+                        .value
+                        .trim();
+
+
+                const amount =
+                    Number(
+                        document
+                            .getElementById("expenseAmount")
+                            .value
+                    );
+
+
+                const category =
+                    document
+                        .getElementById("expenseCategory")
+                        .value;
+
+
+                const date =
+                    document
+                        .getElementById("expenseDate")
+                        .value;
+
+
+
+                // Validate
+
+                if (name === "") {
+
+                    alert("Please enter an expense name.");
+
+                    return;
+
+                }
+
+
+                if (amount <= 0) {
+
+                    alert("Please enter an amount greater than 0.");
+
+                    return;
+
+                }
+
+
+                if (date === "") {
+
+                    alert("Please select a date.");
+
+                    return;
+
+                }
+
+
+
+                // Hide empty message
+
+                emptyMessage.style.display = "none";
+
+
+
+                // Create expense element
+
+                const expense =
+                    document.createElement("div");
+
+
+                expense.className = "expense";
+
+
+
+                expense.innerHTML = `
+
+                    <h3>
+                        ${name}
+                    </h3>
+
+                    <p>
+                        <strong>Amount:</strong>
+                        ₹${amount}
+                    </p>
+
+                    <p>
+                        <strong>Category:</strong>
+                        ${category}
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+                        ${date}
+                    </p>
+
+                `;
+
+
+
+                // Create Delete button
+
+                const deleteButton =
+                    document.createElement("button");
+
+
+                deleteButton.textContent =
+                    "Delete";
+
+
+                deleteButton.className =
+                    "delete-button";
+
+
+                deleteButton.type =
+                    "button";
+
+
+
+                // Delete expense
+
+                deleteButton.addEventListener(
+                    "click",
+                    function() {
+
+                        // Remove amount from total
+
+                        totalAmount =
+                            totalAmount - amount;
+
+
+                        // Update total
+
+                        totalDisplay.textContent =
+                            "₹" + totalAmount;
+
+
+                        // Remove expense
+
+                        expense.remove();
+
+
+                        // Show empty message again
+
+                        if (
+                            expenseList
+                                .querySelectorAll(".expense")
+                                .length === 0
+                        ) {
+
+                            emptyMessage.style.display =
+                                "block";
+
+                        }
+
+                    }
                 );
 
 
-            const category =
-                document.getElementById("expenseCategory").value;
+
+                // Add button to expense
+
+                expense.appendChild(deleteButton);
 
 
-            const date =
-                document.getElementById("expenseDate").value;
+
+                // Add expense to list
+
+                expenseList.appendChild(expense);
 
 
-            // Check the amount
 
-            if (name === "") {
-                alert("Please enter an expense name.");
-                return;
+                // Add amount to total
+
+                totalAmount =
+                    totalAmount + amount;
+
+
+                // Update total
+
+                totalDisplay.textContent =
+                    "₹" + totalAmount;
+
+
+
+                // Clear form
+
+                expenseForm.reset();
+
             }
-
-
-            if (amount <= 0) {
-                alert("Please enter an amount greater than 0.");
-                return;
-            }
-
-
-            if (date === "") {
-                alert("Please select a date.");
-                return;
-            }
-
-
-            // Hide "No expenses added yet"
-
-            emptyMessage.style.display = "none";
-
-
-            // Create a new expense
-
-            const expense =
-                document.createElement("div");
-
-
-            expense.className = "expense";
-
-
-            expense.innerHTML = `
-
-                <h3>${name}</h3>
-
-                <p>
-                    <strong>Amount:</strong> ₹${amount}
-                </p>
-
-                <p>
-                    <strong>Category:</strong> ${category}
-                </p>
-
-                <p>
-                    <strong>Date:</strong> ${date}
-                </p>
-
-            `;
-
-
-            // Add the expense to the page
-
-            expenseList.appendChild(expense);
-
-
-            // Add amount to total
-
-            totalAmount = totalAmount + amount;
-
-
-            // Display the new total
-
-            totalDisplay.textContent =
-                "₹" + totalAmount;
-
-
-            // Clear the form
-
-            expenseForm.reset();
-
-        });
+        );
 
     </script>
+
 
 </body>
 
