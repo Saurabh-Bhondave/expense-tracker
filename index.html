@@ -2,121 +2,44 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Personal Expense Tracker</title>
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #f5f5f5;
-            color: #222;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        .form-box,
-        .total-box,
-        .expense-box {
-            background: white;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        button {
-            padding: 10px 18px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 6px;
-        }
-
-        .add-button {
-            margin-top: 20px;
-            background: #222;
-            color: white;
-        }
-
-        .delete-button {
-            background: #d93636;
-            color: white;
-            margin-top: 10px;
-        }
-
-        .total-box {
-            text-align: center;
-        }
-
-        #totalAmount {
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        .expense {
-            border-top: 1px solid #ddd;
-            padding: 15px 0;
-        }
-
-        .expense:first-child {
-            border-top: none;
-        }
-
-        .expense h3 {
-            margin: 0 0 10px;
-        }
-
-        .expense p {
-            margin: 6px 0;
-        }
-
-        .empty {
-            color: #777;
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 
 <body>
 
-    <h1>Personal Expense Tracker</h1>
 
-    <p>
+    <h1>
+        Personal Expense Tracker
+    </h1>
+
+
+    <p class="subtitle">
         Track your expenses and manage your spending.
     </p>
 
 
-    <!-- FORM -->
+
+    <!-- ADD EXPENSE FORM -->
 
     <div class="form-box">
 
-        <h2>Add Expense</h2>
+        <h2>
+            Add Expense
+        </h2>
+
 
         <form id="expenseForm">
+
 
             <label for="expenseName">
                 Expense Name
@@ -130,6 +53,7 @@
             >
 
 
+
             <label for="expenseAmount">
                 Amount
             </label>
@@ -141,6 +65,7 @@
                 min="1"
                 required
             >
+
 
 
             <label for="expenseCategory">
@@ -172,6 +97,7 @@
             </select>
 
 
+
             <label for="expenseDate">
                 Date
             </label>
@@ -183,6 +109,7 @@
             >
 
 
+
             <button
                 type="submit"
                 class="add-button">
@@ -191,16 +118,18 @@
 
             </button>
 
+
         </form>
 
     </div>
+
 
 
     <!-- TOTAL -->
 
     <div class="total-box">
 
-        <h2>
+        <h2 class="total-title">
             Total Expenses
         </h2>
 
@@ -211,6 +140,7 @@
     </div>
 
 
+
     <!-- EXPENSE LIST -->
 
     <div class="expense-box">
@@ -219,356 +149,24 @@
             Expenses
         </h2>
 
+
         <div id="expenseList">
 
-            <p
-                id="emptyMessage"
-                class="empty">
-
+            <p class="empty">
                 No expenses added yet.
-
             </p>
 
         </div>
+
 
     </div>
 
 
 
-    <script>
+    <!-- JAVASCRIPT -->
 
-        /*
-        ==========================================
-        GET HTML ELEMENTS
-        ==========================================
-        */
+    <script src="script.js"></script>
 
-        const expenseForm =
-            document.getElementById("expenseForm");
-
-        const expenseList =
-            document.getElementById("expenseList");
-
-        const totalDisplay =
-            document.getElementById("totalAmount");
-
-        const emptyMessage =
-            document.getElementById("emptyMessage");
-
-
-        /*
-        ==========================================
-        STORE EXPENSES
-        ==========================================
-        */
-
-        let expenses =
-            JSON.parse(
-                localStorage.getItem("expenses")
-            ) || [];
-
-
-        /*
-        ==========================================
-        SAVE EXPENSES
-        ==========================================
-        */
-
-        function saveExpenses() {
-
-            localStorage.setItem(
-                "expenses",
-                JSON.stringify(expenses)
-            );
-
-        }
-
-
-        /*
-        ==========================================
-        DISPLAY EXPENSES
-        ==========================================
-        */
-
-        function displayExpenses() {
-
-            expenseList.innerHTML = "";
-
-            let totalAmount = 0;
-
-
-            if (expenses.length === 0) {
-
-                expenseList.innerHTML = `
-                    <p class="empty">
-                        No expenses added yet.
-                    </p>
-                `;
-
-                totalDisplay.textContent = "₹0";
-
-                return;
-            }
-
-
-            expenses.forEach(function(expense) {
-
-                totalAmount =
-                    totalAmount + expense.amount;
-
-
-                const expenseElement =
-                    document.createElement("div");
-
-
-                expenseElement.className =
-                    "expense";
-
-
-                expenseElement.innerHTML = `
-
-                    <h3>
-                        ${expense.name}
-                    </h3>
-
-                    <p>
-                        <strong>Amount:</strong>
-                        ₹${expense.amount}
-                    </p>
-
-                    <p>
-                        <strong>Category:</strong>
-                        ${expense.category}
-                    </p>
-
-                    <p>
-                        <strong>Date:</strong>
-                        ${expense.date}
-                    </p>
-
-                `;
-
-
-                /*
-                ==================================
-                DELETE BUTTON
-                ==================================
-                */
-
-                const deleteButton =
-                    document.createElement("button");
-
-
-                deleteButton.textContent =
-                    "Delete";
-
-
-                deleteButton.className =
-                    "delete-button";
-
-
-                deleteButton.type =
-                    "button";
-
-
-                deleteButton.addEventListener(
-                    "click",
-                    function() {
-
-                        expenses =
-                            expenses.filter(
-                                function(item) {
-
-                                    return item.id !== expense.id;
-
-                                }
-                            );
-
-
-                        saveExpenses();
-
-                        displayExpenses();
-
-                    }
-                );
-
-
-                expenseElement.appendChild(
-                    deleteButton
-                );
-
-
-                expenseList.appendChild(
-                    expenseElement
-                );
-
-            });
-
-
-            /*
-            ==================================
-            SHOW TOTAL
-            ==================================
-            */
-
-            totalDisplay.textContent =
-                "₹" + totalAmount;
-
-        }
-
-
-
-        /*
-        ==========================================
-        ADD NEW EXPENSE
-        ==========================================
-        */
-
-        expenseForm.addEventListener(
-            "submit",
-            function(event) {
-
-                event.preventDefault();
-
-
-                const name =
-                    document
-                        .getElementById("expenseName")
-                        .value
-                        .trim();
-
-
-                const amount =
-                    Number(
-                        document
-                            .getElementById("expenseAmount")
-                            .value
-                    );
-
-
-                const category =
-                    document
-                        .getElementById("expenseCategory")
-                        .value;
-
-
-                const date =
-                    document
-                        .getElementById("expenseDate")
-                        .value;
-
-
-
-                /*
-                ==================================
-                VALIDATION
-                ==================================
-                */
-
-                if (name === "") {
-
-                    alert(
-                        "Please enter an expense name."
-                    );
-
-                    return;
-
-                }
-
-
-                if (amount <= 0) {
-
-                    alert(
-                        "Please enter an amount greater than 0."
-                    );
-
-                    return;
-
-                }
-
-
-                if (date === "") {
-
-                    alert(
-                        "Please select a date."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /*
-                ==================================
-                CREATE EXPENSE OBJECT
-                ==================================
-                */
-
-                const newExpense = {
-
-                    id: Date.now(),
-
-                    name: name,
-
-                    amount: amount,
-
-                    category: category,
-
-                    date: date
-
-                };
-
-
-                /*
-                ==================================
-                ADD TO ARRAY
-                ==================================
-                */
-
-                expenses.push(newExpense);
-
-
-                /*
-                ==================================
-                SAVE TO BROWSER
-                ==================================
-                */
-
-                saveExpenses();
-
-
-                /*
-                ==================================
-                UPDATE SCREEN
-                ==================================
-                */
-
-                displayExpenses();
-
-
-                /*
-                ==================================
-                CLEAR FORM
-                ==================================
-                */
-
-                expenseForm.reset();
-
-            }
-        );
-
-
-
-        /*
-        ==========================================
-        LOAD SAVED EXPENSES
-        ==========================================
-        */
-
-        displayExpenses();
-
-    </script>
 
 </body>
 
