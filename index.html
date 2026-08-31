@@ -5,10 +5,9 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Expense Tracker</title>
+    <title>Personal Expense Tracker</title>
 
 </head>
 
@@ -22,13 +21,12 @@
     </p>
 
 
-<h2>Total Expenses: ₹<span id="totalAmount">0</span></h2>
+    <h2>Add Expense</h2>
 
-<h2>Expenses</h2>
 
     <form id="expenseForm">
 
-        <label>
+        <label for="expenseName">
             Expense Name:
         </label>
 
@@ -44,7 +42,7 @@
         <br><br>
 
 
-        <label>
+        <label for="expenseAmount">
             Amount:
         </label>
 
@@ -54,13 +52,14 @@
             type="number"
             id="expenseAmount"
             placeholder="e.g. 150"
+            min="0"
             required
         >
 
         <br><br>
 
 
-        <label>
+        <label for="expenseCategory">
             Category:
         </label>
 
@@ -68,22 +67,22 @@
 
         <select id="expenseCategory">
 
-            <option>Food</option>
+            <option value="Food">Food</option>
 
-            <option>Travel</option>
+            <option value="Travel">Travel</option>
 
-            <option>Shopping</option>
+            <option value="Shopping">Shopping</option>
 
-            <option>Bills</option>
+            <option value="Bills">Bills</option>
 
-            <option>Other</option>
+            <option value="Other">Other</option>
 
         </select>
 
         <br><br>
 
 
-        <label>
+        <label for="expenseDate">
             Date:
         </label>
 
@@ -104,43 +103,69 @@
 
     </form>
 
-<h2>Total Expenses: ₹<span id="totalAmount">0</span></h2>
+
+    <hr>
+
+
+    <h2>
+        Total Expenses: ₹<span id="totalAmount">0</span>
+    </h2>
+
+
     <h2>Expenses</h2>
 
 
     <div id="expenseList">
 
-        <p>
+        <p id="emptyMessage">
             No expenses added yet.
         </p>
 
     </div>
 
 
+
     <script>
 
-const form =
-    document.getElementById("expenseForm");
+        // Get the HTML elements
 
-const expenseList =
-    document.getElementById("expenseList");
+        const form =
+            document.getElementById("expenseForm");
 
-let totalAmount = 0;
+        const expenseList =
+            document.getElementById("expenseList");
 
-const totalDisplay =
-    document.getElementById("totalAmount");
-    
+        const totalDisplay =
+            document.getElementById("totalAmount");
+
+        const emptyMessage =
+            document.getElementById("emptyMessage");
+
+
+        // Store total amount
+
+        let totalAmount = 0;
+
+
+
+        // When the form is submitted
 
         form.addEventListener("submit", function(event) {
+
+            // Stop the page from refreshing
 
             event.preventDefault();
 
 
+            // Get values from the form
+
             const name =
                 document.getElementById("expenseName").value;
 
-           const amount =
-    Number(document.getElementById("expenseAmount").value);
+            const amount =
+                Number(
+                    document.getElementById("expenseAmount").value
+                );
 
             const category =
                 document.getElementById("expenseCategory").value;
@@ -149,9 +174,32 @@ const totalDisplay =
                 document.getElementById("expenseDate").value;
 
 
+
+            // Make sure amount is valid
+
+            if (amount <= 0) {
+
+                alert("Please enter an amount greater than 0.");
+
+                return;
+
+            }
+
+
+
+            // Remove "No expenses added yet"
+
+            emptyMessage.style.display = "none";
+
+
+
+            // Create a new expense container
+
             const expense =
                 document.createElement("div");
 
+
+            // Put expense information inside it
 
             expense.innerHTML = `
 
@@ -174,13 +222,30 @@ const totalDisplay =
             `;
 
 
+
+            // Add expense to the page
+
             expenseList.appendChild(expense);
-            
-            totalAmount += amount;
 
-            totalDisplay.textContent = totalAmount;
 
-             form.reset();
+
+            // Add amount to total
+
+            totalAmount =
+                totalAmount + amount;
+
+
+
+            // Show updated total
+
+            totalDisplay.textContent =
+                totalAmount;
+
+
+
+            // Clear the form
+
+            form.reset();
 
         });
 
