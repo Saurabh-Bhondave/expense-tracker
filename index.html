@@ -103,7 +103,7 @@
 
     </form>
 
-
+<h2>Total Expenses: ₹<span id="totalAmount">0</span></h2>
     <h2>Expenses</h2>
 
 
@@ -133,8 +133,8 @@
             const name =
                 document.getElementById("expenseName").value;
 
-            const amount =
-                document.getElementById("expenseAmount").value;
+           const amount =
+    Number(document.getElementById("expenseAmount").value);
 
             const category =
                 document.getElementById("expenseCategory").value;
@@ -169,6 +169,9 @@
 
 
             expenseList.appendChild(expense);
+            totalAmount += amount;
+
+totalDisplay.textContent = totalAmount;
 
 
             form.reset();
